@@ -1,0 +1,29 @@
+<div class="container-fluid w-50 p-3">
+    <h3 class="mb-4 pb-2 pb-md-0 mb-md-3 text-center">Login</h3>
+    <form action="/accounts/login" method="POST" id="loginForm">
+        {{#if error}}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+        {{/if}}
+        {{!-- <div class="">
+            <button type="button" onclick="myFunction()">Click me</button>
+        </div> --}}
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <label class="form-label" for="login">Email address</label>
+            <input type="email" id="email" name="email" class="form-control" value="{{email}}" required />
+        </div>
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required />
+        </div>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4" form="loginForm">Sign in</button>
+        <!-- Register buttons -->
+        <div class="text-center">
+            <p>Not a member? <a href="/accounts/register">Register</a></p>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,5 @@
+body {
+    background-attachment: fixed;
+    background-color: pink;
+    background-image: linear-gradient(to bottom right, pink, purple);
+}
