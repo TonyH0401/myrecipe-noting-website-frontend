@@ -56,19 +56,19 @@ router.post("/login", async (req, res) => {
       data = await result.json();
     })
     .catch((error) => {
-      return res.status(500).render("error/500", {
+      return res.status(500).render("errors/500", {
         document: "Error",
         message: error.message,
       });
     });
   if (!data) {
-    return res.status(500).render("error/500", {
+    return res.status(500).render("errors/500", {
       document: "Error",
       message: "No Data",
     });
   }
   if (data.code == 0) {
-    return res.status(500).render("error/500", {
+    return res.status(500).render("errors/500", {
       document: "Error",
       message: data.message,
     });
@@ -93,15 +93,49 @@ router.get("/otp", (req, res) => {
   }
   let fields = email.toString().split("@");
   let censorEmail = fields[0][0] + "****" + "@" + fields[1];
-  // console.log(censor);
   return res.status(200).render("accounts/otp", {
     document: "OTP Verification",
     style: "otp",
     censorEmail: censorEmail,
+    email: email,
+    error: req.flash("error") || "",
   });
 });
-router.post("/otp", (req, res) => {
-  const { otp } = req.body;
+router.post("/otp", async (req, res) => {
+  const { otp, email } = req.body;
+  let body = JSON.stringify({
+    accountEmail: email,
+    otpCode: otp,
+  });
+  let data;
+  await fetch(API + "/accounts/otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body,
+  })
+    .then(async (result) => {
+      data = await result.json();
+    })
+    .catch((error) => {
+      return res.status(500).render("errors/500", {
+        document: "Error",
+        message: error.message,
+      });
+    });
+  if (data.code == 0) {
+    return res.status(500).render("errors/500", {
+      document: "Error",
+      message: data.message,
+    });
+  }
+  if (!data.success) {
+    req.flash("email", email);
+    req.flash("error", data.message);
+    return res.status(404).redirect("/accounts/otp");
+  }
+  // session here
+  console.log("You are in");
+  return res.status(200).redirect("/");
 });
 
 module.exports = router;

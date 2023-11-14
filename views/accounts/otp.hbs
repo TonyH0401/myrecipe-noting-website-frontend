@@ -1,7 +1,7 @@
 <div class="container-fluid w-50 p-3">
     <h3 class="mb-4 pb-2 pb-md-0 mb-md-3 text-center">OTP Verification</h3>
     <h2 class="mb-4 pb-2 pb-md-0 mb-md-3 text-center">Please check your {{censorEmail}} email!</h2>
-    <form action="/accounts/login" method="POST" id="loginForm">
+    <form action="/accounts/otp" method="POST" id="loginForm">
         {{#if error}}
         <div class="alert alert-danger" role="alert">
             {{error}}
@@ -10,7 +10,8 @@
         <!-- Email input -->
         <div class="form-outline mb-4">
             <label class="form-label" for="login">OTP Verification Code</label>
-            <input type="text" id="text" name="otp" class="form-control form-control-lg" value="{{text}}" required />
+            <input type="text" id="text" name="otp" class="form-control form-control-lg" value="{{otp}}" required />
+            <input type="email" id="email" name="email" class="form-control form-control-lg" value="{{email}}" hidden />
         </div>
         <!-- Submit button -->
         <button type="submit" class="btn btn-primary btn-block mb-4" form="loginForm">Sign in</button>
