@@ -25,8 +25,40 @@ router.get("/register", limiter, (req, res) => {
     error: req.flash("error") || "",
   });
 });
-router.post("/register", (req, res) => {
-  console.log(req.body);
+router.post("/register", async (req, res) => {
+  const { firstName, lastName, email, phone, password1, password2, terms } =
+    req.body;
+  if (!terms) {
+    req.flash("error", "You have not accepted the terms of condition!");
+    return res.status(300).redirect("/accounts/register");
+  }
+  let temp = phone.toString().replaceAll("-", "") 
+  // console.log(req.body);
+  console.log(temp)
+  // fetch /login
+  // let body = JSON.stringify({
+  //   firstName: firstName,
+  //   lastName: lastName,
+  //   emailAddress: email,
+  //   phoneNumber: phone,
+  //   password1: password1,
+  //   password2: password2,
+  // });
+  // let data;
+  // await fetch(API + "/accounts/register", {
+  //   method: "POST",
+  //   headers: { "Content-Type": "application/json" },
+  //   body: body,
+  // })
+  //   .then(async (result) => {
+  //     data = await result.json();
+  //   })
+  //   .catch((error) => {
+  //     return res.status(500).render("errors/500", {
+  //       document: "Error",
+  //       message: error.message,
+  //     });
+  //   });
   return res.status(200).json({
     code: 1,
   });

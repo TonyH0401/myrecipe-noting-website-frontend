@@ -1,6 +1,11 @@
 <div class="container">
     <div class="hero">
         <h1>Create an account</h1>
+        {{#if error}}
+        <div class="alert alert-danger" role="alert">
+            {{error}}
+        </div>
+        {{/if}}
         <div class="signup-box">
             <div class="left-box">
                 <div class="div-center">
