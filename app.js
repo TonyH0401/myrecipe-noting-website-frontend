@@ -43,8 +43,12 @@ app.use(
 
 // default route
 app.get("/", (req, res) => {
+  const currentUser = req.session.user;
+  if (currentUser) {
+    return res.status(300).redirect("/accounts/home");
+  }
   return res.status(200).render("home", {
-    document: "Home Page",
+    document: "Welcome Page",
     style: "style",
   });
 });

@@ -13,13 +13,12 @@ const fetch = require("node-fetch");
 //
 const API = process.env.API;
 
-//
+// register
 router.get("/register", limiter, (req, res) => {
   return res.status(200).render("accounts/register", {
     document: "Account Register",
   });
 });
-
 router.post("/register", (req, res) => {
   return res.status(200).json({
     code: 1,
@@ -27,13 +26,10 @@ router.post("/register", (req, res) => {
 });
 // login
 router.get("/login", limiter, async (req, res) => {
-  // const currentUser = req.session.user;
-  // if (!currentUser) {
-  //   return res.status(200).render("accounts/login", {
-  //     document: "Login Page",
-  //     style: "login",
-  //   });
-  // }
+  const currentUser = req.session.user;
+  if (currentUser) {
+    return res.status(200).redirect("/accounts/home");
+  }
   return res.status(200).render("accounts/login", {
     document: "Login Page",
     style: "login",
@@ -81,7 +77,11 @@ router.post("/login", async (req, res) => {
   return res.status(200).redirect("/accounts/otp");
 });
 // otp
-router.get("/otp", (req, res) => {
+router.get("/otp", limiter, (req, res) => {
+  const currentUser = req.session.user;
+  if (currentUser) {
+    return res.status(200).redirect("/accounts/home");
+  }
   const email = req.flash("email") || "";
   if (email.length == 0) {
     req.flash("error", "Account OTP Error! Please Re-Login!");
@@ -133,9 +133,20 @@ router.post("/otp", async (req, res) => {
     req.flash("error", data.message);
     return res.status(404).redirect("/accounts/otp");
   }
-  // session here
-  console.log("You are in");
-  return res.status(200).redirect("/");
+  // assign user session
+  req.session.user = email;
+  return res.status(200).redirect("/accounts/home");
+});
+// account home
+router.get("/home", limiter, (req, res) => {
+  const currentUser = req.session.user;
+  if (!currentUser) {
+    return res.status(300).redirect("/");
+  }
+  return res.status(200).render("accounts/home", {
+    document: "Home Page",
+    style: "style",
+  });
 });
 
 module.exports = router;
