@@ -1,3 +1,28 @@
 <div class="container">
-    <h1>This is register page</h1>
+    <div class="hero">
+        <h1>Create an account</h1>
+        <div class="signup-box">
+            <div class="left-box">
+                <div class="div-center">
+                    <i class="fa-regular fa-message fa-3x"></i>
+                </div>
+                <form action="" method="post" id="registerForm">
+                    <input type="text" placeholder="First Name" id="firstName" class="input-box" name="firstName"
+                        required>
+                    <input type="text" placeholder="Last Name" id="lastName" class="input-box" name="lastName" required>
+                    <input type="tel" placeholder="Phone Number (000-000-0000)" id="phone" class="input-box"
+                        name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                    <input type="email" placeholder="Your Email" id="email" class="input-box" name="email" required>
+                    <input type="password" placeholder="Your Password" id="password1" class="input-box" name="password1"
+                        required>
+                    <input type="password" placeholder="Confirm Password" id="password2" class="input-box"
+                        name="password2" required>
+                    <input type="checkbox" id="terms" name="terms">
+                    <label for="terms">I accept the terms and condition.</label><br>
+                    <button type="submit" form="registerForm">SIGN UP</button>
+                </form>
+            </div>
+        </div>
+        <p class="login-msg">Already have an account? <a href="/accounts/login">Login Now</a> </p>
+    </div>
 </div>

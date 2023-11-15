@@ -15,11 +15,18 @@ const API = process.env.API;
 
 // register
 router.get("/register", limiter, (req, res) => {
+  const currentUser = req.session.user;
+  if (currentUser) {
+    return res.status(200).redirect("/accounts/home");
+  }
   return res.status(200).render("accounts/register", {
-    document: "Account Register",
+    document: "Register Page",
+    style: "register",
+    error: req.flash("error") || "",
   });
 });
 router.post("/register", (req, res) => {
+  console.log(req.body);
   return res.status(200).json({
     code: 1,
   });

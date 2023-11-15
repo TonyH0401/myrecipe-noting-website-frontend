@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    /* font-family: 'Courier New', Courier, monospace; */
+    font-family: 'Poppins', Courier, monospace;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #292929;
+}
+
+.hero {
+    width: 100%;
+    min-height: 100vh;
+    background: #292929;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.hero h1 {
+    color: #fff;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+.signup-box {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 90%;
+    max-width: 800px;
+    background: #fff;
+}
+
+.left-box {
+    padding: 30px;
+    background: #6b00d5;
+    flex-basis: 50%;
+    flex-grow: 1;
+    color: #fff;
+}
+
+.input-box {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #fff;
+    outline: none;
+    color: #fff;
+    font-size: 12px;
+    background: transparent;
+}
+
+::placeholder {
+    color: #fff;
+}
+
+input[type=checkbox] {
+    margin-top: 15px;
+}
+
+.left-box button {
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    border: 0;
+    outline: none;
+    font-size: 16px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background 0.5s;
+}
+
+.left-box button:hover {
+    font-weight: 500;
+    background: #000;
+    color: #fff;
+}
+
+.fa-message {
+    margin-bottom: 15px;
+}
+
+.div-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-msg {
+    color: #fff;
+    margin-top: 30px;
+    font-size: 15px;
+}
+
+.login-msg a {
+    color: #ea4335;
+    text-decoration: none;
+}
