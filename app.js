@@ -7,6 +7,7 @@ const exphbs = require("express-handlebars");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const flash = require("connect-flash");
+const morgan = require("morgan");
 
 // .env
 const port = process.env.PORT || "2020";
@@ -33,6 +34,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
+app.use(morgan("dev"));
 app.use(
   session({
     secret: secret,
@@ -45,7 +47,7 @@ app.use(
 app.get("/", (req, res) => {
   const currentUser = req.session.user;
   if (currentUser) {
-    return res.status(300).redirect("/accounts/home");
+    return res.status(200).redirect("/accounts/home");
   }
   return res.status(200).render("home", {
     document: "Welcome Page",
