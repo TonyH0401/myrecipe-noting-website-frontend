@@ -30,13 +30,7 @@ app.set("views", "./views");
 // app use
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-app.use(cors());
-// app.use(
-//   cors({
-//     // white list
-//     origin: ["https://www.section.io", "https://www.google.com"],
-//   })
-// );
+app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
@@ -53,9 +47,9 @@ app.use(
 app.get("/", (req, res) => {
   const currentUser = req.session.user;
   if (currentUser) {
-    return res.status(200).redirect("/accounts/home");
+    return res.status(201).redirect("/accounts/home");
   }
-  return res.status(200).render("home", {
+  return res.status(202).render("home", {
     document: "Welcome Page",
     style: "style",
   });
