@@ -31,6 +31,12 @@ app.set("views", "./views");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(cors());
+// app.use(
+//   cors({
+//     // white list
+//     origin: ["https://www.section.io", "https://www.google.com"],
+//   })
+// );
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());

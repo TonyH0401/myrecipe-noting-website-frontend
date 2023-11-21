@@ -7,6 +7,10 @@ const limiter = rateLimit({
   max: 100, // Limit each IP to 21 requests per `window` (here, per 15 minutes)
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false,
+  message: `<div style="width:100vh; padding: 1rem; background-color: red; font-size: 32px; font-weight: 700; 
+  text-align: center; margin: 0 auto"> 
+    <h3 style="color: white">You are suspended for sending too many requests!</h3>
+  </div> `,
 });
 const fetch = require("node-fetch");
 
