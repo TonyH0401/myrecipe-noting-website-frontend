@@ -1,77 +1,68 @@
-<div class="container">
-    <div>
-        <h1>This is home page!!!</h1>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand font-weight-bold" href="/">{{firstNameDisplay}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Create</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="/" method="GET">
+            <button class="btn btn-danger my-2 my-sm-0" type="submit">Cancel</button>
+        </form>
     </div>
-    <div>
-        <h1>This is home page!!!</h1>
-    </div>
-    <div>
-        <p id="demo">A Paragraph.</p>
-    </div>
-    <div>
-        <button type="button" onclick="myFunction()">Try it</button>
-    </div>
+</nav>
 
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <table class="table">
-        <thead class="thead-light">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-            </tr>
-        </tbody>
-    </table>
-
+<div class="container pt-3">
+    <form action="/demo" method="POST" id="demoForm">
+        <div id="originalInputDiv">
+            <div class="form-row align-items-center" id="originalInput">
+                {{!-- original --}}
+                <div class="form-group col-md-6">
+                    <label for="inputIngredientName">Ingredient Name</label>
+                    <input type="text" class="form-control" id="ingredientName" name="ingredientName"
+                        placeholder="Ingredient Name" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputIngredientQuantity">Ingredient Quantity</label>
+                    <input type="number" class="form-control" id="ingredientQuantity" name="ingredientQuantity"
+                        placeholder="Ingredient Quantity" min="1" required>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="addRowButton">Action</label>
+                    <button type="button" class="btn btn-dark btn-block" id="addRowButton">ADD ROW</button>
+                </div>
+            </div>
+        </div>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4" form="demoForm">Post</button>
+    </form>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#addRowButton").click(function () {
+            newRowInput =
+                `<div class="form-row align-items-center" id="row">
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" id="ingredientName" name="ingredientName"
+                            placeholder="Ingredient Name" required>
+                    </div>` +
+                `<div class="form-group col-md-4">
+                    <input type="number" class="form-control" id="ingredientQuantity" name="ingredientQuantity"
+                        placeholder="Ingredient Quantity" min="1" required>
+                </div>` +
+                `   <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-danger btn-block" id="removeRowButton">REMOVE</button>
+                    </div>
+                </div>`;
+            $("#originalInputDiv").append(newRowInput)
+        })
+        $("body").on("click", "#removeRowButton", function () {
+            $(this).parents("#row").remove();
+        })
+    })
+</script>
