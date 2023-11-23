@@ -30,7 +30,7 @@ app.set("views", "./views");
 // app use
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(flash());
@@ -39,7 +39,7 @@ app.use(
   session({
     secret: secret,
     saveUninitialized: true,
-    cookie: { maxAge: 15000 },
+    cookie: { maxAge: 15 * 60 * 1000 },
   })
 );
 
@@ -58,6 +58,8 @@ app.get("/", (req, res) => {
 // New Routers
 const AccountRouter = require("./routers/AccountRouter");
 app.use("/accounts", AccountRouter);
+const RecipeRouter = require("./routers/RecipeRouter");
+app.use("/recipes", RecipeRouter);
 
 // error handling
 app.use((req, res, next) => {
