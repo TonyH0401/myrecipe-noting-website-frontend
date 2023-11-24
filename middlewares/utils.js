@@ -39,3 +39,17 @@ module.exports.getRecipebyAccId = async (accountid) => {
     });
   return data;
 };
+
+module.exports.returnObjIngredientsRawInput = (
+  ingredientNameArray,
+  ingredientQuantityArray
+) => {
+  let recipeListObj = [];
+  for (let index = 0; index < ingredientNameArray.length; index++) {
+    recipeListObj.push({
+      ingredientName: ingredientNameArray[index],
+      ingredientQuantity: ingredientQuantityArray[index],
+    });
+  }
+  return recipeListObj;
+};
