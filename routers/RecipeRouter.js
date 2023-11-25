@@ -51,6 +51,7 @@ router.post("/create", async (req, res) => {
   // get raw data from req.body
   const { recipeTitle, ingredientName, ingredientQuantity, recipeNote } =
     req.body;
+  console.log(req.body);
   // get session user
   const currentUser = req.session.user;
   // create an array of object with ingredientName array and ingredientQuantity array
@@ -58,6 +59,7 @@ router.post("/create", async (req, res) => {
     ingredientName,
     ingredientQuantity
   );
+  console.log(recipeListObj);
   // find the account
   let accountFound = await accountInfoByEmail(currentUser);
   // if account is not found render error page

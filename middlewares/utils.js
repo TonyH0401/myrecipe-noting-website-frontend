@@ -45,11 +45,25 @@ module.exports.returnObjIngredientsRawInput = (
   ingredientQuantityArray
 ) => {
   let recipeListObj = [];
-  for (let index = 0; index < ingredientNameArray.length; index++) {
+  // check whether ingredientNameArray or ingredientQuantityArray is an array or not
+  if (
+    typeof ingredientNameArray === "object" &&
+    ingredientNameArray !== null &&
+    ingredientNameArray.constructor === Array
+  ) {
+    for (let index = 0; index < ingredientNameArray.length; index++) {
+      recipeListObj.push({
+        ingredientName: ingredientNameArray[index],
+        ingredientQuantity: ingredientQuantityArray[index],
+      });
+    }
+  } else {
+    // if it's not, we just need to push them in
     recipeListObj.push({
-      ingredientName: ingredientNameArray[index],
-      ingredientQuantity: ingredientQuantityArray[index],
+      ingredientName: ingredientNameArray,
+      ingredientQuantity: ingredientQuantityArray,
     });
   }
+
   return recipeListObj;
 };
