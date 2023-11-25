@@ -104,4 +104,33 @@ router.post("/create", async (req, res) => {
   return res.status(200).redirect("/accounts/home");
 });
 
+// /recipes/delete
+router.get("/delete/:recipeid", async (req, res) => {
+  const { recipeid } = req.params;
+  let data;
+  await fetch(API + `/recipes/delete/${recipeid}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then(async (result) => {
+      data = await result.json();
+    })
+    .catch((error) => {
+      return res.status(500).render("errors/500", {
+        document: "Error",
+        message: error.message,
+      });
+    });
+  if (!data.success) {
+    return res.status(500).render("errors/500", {
+      document: "Error",
+      message: data.message,
+    });
+  }
+  // I guess I cant return a redirect from a DELETE, because it will find the endpoint of the redirect but with the DELETE method
+  // so if I res.redirect in DELETE to "/", it will try and find the "/" but with the DELETE method
+  req.flash("success", data.message);
+  return res.status(200).redirect("/accounts/home");
+});
+
 module.exports = router;
