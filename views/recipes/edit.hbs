@@ -1,0 +1,96 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+    <a class="navbar-brand font-weight-bold" href="/">{{firstNameDisplay}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <form class="form-inline my-2 my-lg-0" action="/accounts/home" method="GET">
+            <button class="btn btn-danger my-2 my-sm-0" type="submit">Cancel</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container pt-3">
+    <form action="#" method="POST" id="demoForm">
+        <div class="form-group">
+            <label for="recipeTitle">Recipe Title</label>
+            <input type="text" class="form-control" id="recipeTitle" name="recipeTitle" placeholder="Recipe Title"
+                value="{{recipeInfo.recipeName}}">
+        </div>
+        <div class="input-group pb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Ingredient Note</span>
+            </div>
+            <textarea class="form-control" name="recipeNote"
+                aria-label="With textarea">{{recipeInfo.recipeNote}}</textarea>
+        </div>
+
+        <div id="originalInputDiv">
+            <div class="form-row align-items-center" id="originalInput">
+                {{!-- original and the 1st --}}
+                <div class="form-group col-md-6">
+                    <label for="inputIngredientName">Ingredient Name</label>
+                    <input type="text" class="form-control" id="ingredientName" name="ingredientName"
+                        placeholder="Ingredient Name" value="{{recipeInfo.ingredientsList.[0].ingredientName}}"
+                        required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputIngredientQuantity">Ingredient Quantity</label>
+                    <input type="number" class="form-control" id="ingredientQuantity" name="ingredientQuantity"
+                        placeholder="Ingredient Quantity" min="1"
+                        value="{{recipeInfo.ingredientsList.[0].ingredientQuantity}}" required>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="addRowButton">Action</label>
+                    <button type="button" class="btn btn-dark btn-block" id="addRowButton">ADD ROW</button>
+                </div>
+            </div>
+            {{!-- each loop --}}
+            {{#each recipeInfo.ingredientsList}}
+            {{#if @index}}
+            <div class="form-row align-items-center" id="row">
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="ingredientName" name="ingredientName"
+                        placeholder="Ingredient Name" value="{{this.ingredientName}}" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <input type="number" class="form-control" id="ingredientQuantity" name="ingredientQuantity"
+                        placeholder="Ingredient Quantity" min="1" value="{{this.ingredientQuantity}}" required>
+                </div>
+                <div class="form-group col-md-2">
+                    <button type="button" class="btn btn-danger btn-block" id="removeRowButton">REMOVE</button>
+                </div>
+            </div>
+            {{/if}}
+            {{/each}}
+        </div>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4" form="demoForm">Confirm Edit</button>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#addRowButton").click(function () {
+            newRowInput =
+                `<div class="form-row align-items-center" id="row">
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" id="ingredientName" name="ingredientName"
+                            placeholder="Ingredient Name" required>
+                    </div>` +
+                `<div class="form-group col-md-4">
+                    <input type="number" class="form-control" id="ingredientQuantity" name="ingredientQuantity"
+                        placeholder="Ingredient Quantity" min="1" required>
+                </div>` +
+                `   <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-danger btn-block" id="removeRowButton">REMOVE</button>
+                    </div>
+                </div>`;
+            $("#originalInputDiv").append(newRowInput)
+        })
+        $("body").on("click", "#removeRowButton", function () {
+            $(this).parents("#row").remove();
+        })
+    })
+</script>

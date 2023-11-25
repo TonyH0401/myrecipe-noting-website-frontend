@@ -104,7 +104,7 @@ router.post("/create", async (req, res) => {
   return res.status(200).redirect("/accounts/home");
 });
 
-// /recipes/delete
+// /recipes/delete/:recipeid
 router.get("/delete/:recipeid", async (req, res) => {
   const { recipeid } = req.params;
   let data;
@@ -130,6 +130,103 @@ router.get("/delete/:recipeid", async (req, res) => {
   // I guess I cant return a redirect from a DELETE, because it will find the endpoint of the redirect but with the DELETE method
   // so if I res.redirect in DELETE to "/", it will try and find the "/" but with the DELETE method
   req.flash("success", data.message);
+  return res.status(200).redirect("/accounts/home");
+});
+
+// /recipes/edit/:recipeid
+router.get("/edit/:recipeid", async (req, res) => {
+  const currentUser = req.session.user;
+  const { recipeid } = req.params;
+  if (!currentUser) {
+    return res.status(201).redirect("/");
+  }
+  let accountInfo = await accountInfoByEmail(currentUser);
+  if (!accountInfo.success) {
+    return res.status(500).render("errors/500", {
+      document: "Error",
+      message: accountInfo.message,
+    });
+  }
+  let data;
+  await fetch(API + `/recipes/recipe/${recipeid}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then(async (result) => {
+      data = await result.json();
+    })
+    .catch((error) => {
+      return res.status(500).render("errors/500", {
+        document: "Error",
+        message: error.message,
+      });
+    });
+  if (!data.success) {
+    return res.status(500).render("errors/500", {
+      document: "Error",
+      message: data.message,
+    });
+  }
+  return res.status(200).render("recipes/edit", {
+    document: "Edit Recipe",
+    style: "style",
+    firstNameDisplay:
+      accountInfo.info.firstName + "'s Recipes" || "Your Recipe Page",
+    recipeInfo: data.data,
+    error: req.flash("error") || "",
+    success: req.flash("success") || "",
+  });
+});
+router.post("/edit/:recipeid", async (req, res) => {
+  //get required values
+  const currentUser = req.session.user;
+  const { recipeid } = req.params;
+  const { recipeTitle, recipeNote, ingredientName, ingredientQuantity } =
+    req.body;
+  //find account based on session user
+  let accountInfo = await accountInfoByEmail(currentUser);
+  if (!accountInfo.success) {
+    return res.status(500).render("errors/500", {
+      document: "Error",
+      message: accountInfo.message,
+    });
+  }
+  // get session user ID
+  const currentUserID = accountInfo.info._id;
+  let recipeListObj = returnObjIngredientsRawInput(
+    ingredientName,
+    ingredientQuantity
+  );
+  // JSON stringify the data
+  let body = JSON.stringify({
+    recipeName: recipeTitle,
+    ingredientsList: recipeListObj,
+    recipeNote: recipeNote,
+    recipeAuthor: currentUserID,
+  });
+  // fetch to BE API
+  let data;
+  await fetch(API + `/recipes/edit/${recipeid}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: body,
+  })
+    .then(async (result) => {
+      data = await result.json();
+    })
+    .catch((error) => {
+      return res.status(500).render("errors/500", {
+        document: "Error",
+        message: error.message,
+      });
+    });
+  if (!data.success) {
+    return res.status(500).render("errors/500", {
+      document: "Error",
+      message: data.message,
+    });
+  }
+  req.flash("success", `Recipe called: ${data.data.recipeName} is Updated!`);
   return res.status(200).redirect("/accounts/home");
 });
 
