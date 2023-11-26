@@ -13,11 +13,18 @@ const limiter = rateLimit({
   </div> `,
 });
 const fetch = require("node-fetch");
+const moment = require("moment");
 
-//
+// .env
 const API = process.env.API;
 
-// register
+//custom functions
+const {
+  accountInfoByEmail,
+  getRecipebyAccId,
+} = require("../middlewares/utils");
+
+// /accounts/register
 router.get("/register", limiter, (req, res) => {
   const currentUser = req.session.user;
   if (currentUser) {
@@ -87,6 +94,7 @@ router.post("/register", async (req, res) => {
     message: `Please check your ${email} email account!`,
   });
 });
+// /accounts/verify
 // verify JWT for register
 router.get("/verify", async (req, res) => {
   const { token } = req.query;
@@ -126,7 +134,7 @@ router.get("/verify", async (req, res) => {
   req.flash("success", data.message);
   return res.status(200).redirect("/accounts/login");
 });
-// login
+// /accounts/login
 router.get("/login", limiter, async (req, res) => {
   const currentUser = req.session.user;
   if (currentUser) {
@@ -179,7 +187,7 @@ router.post("/login", async (req, res) => {
   req.flash("email", email);
   return res.status(200).redirect("/accounts/otp");
 });
-// otp
+// /accounts/otp
 router.get("/otp", limiter, (req, res) => {
   const currentUser = req.session.user;
   if (currentUser) {
@@ -240,16 +248,60 @@ router.post("/otp", async (req, res) => {
   req.session.user = email;
   return res.status(200).redirect("/accounts/home");
 });
-// account home
-router.get("/home", limiter, (req, res) => {
+// /accounts/home
+router.get("/home", limiter, async (req, res) => {
   const currentUser = req.session.user;
   if (!currentUser) {
     return res.status(300).redirect("/");
   }
+  let accountInfo = await accountInfoByEmail(currentUser);
+  if (!accountInfo.success) {
+    return res.status(500).render("errors/500", {
+      document: "Error",
+      message: accountInfo.message,
+    });
+  }
+  let recipeListFound = await getRecipebyAccId(accountInfo.info._id);
+  if (!recipeListFound.success) {
+    return res.status(500).render("errors/500", {
+      document: "Error",
+      message: recipeListFound.message,
+    });
+  }
+  // if the list is not empty, use the code below to map it
+  let data = [];
+  if (recipeListFound.count != 0) {
+    let rawRecipeList = recipeListFound.data;
+    data = rawRecipeList.map((e) => {
+      return {
+        _id: e._id,
+        recipeName: e.recipeName,
+        createdAt: moment(e.createdAt).format("LLLL"),
+        ingredientsList: e.ingredientsList,
+        recipeNote: e.recipeNote,
+      };
+    });
+  }
+  // if the list is empty, return empty value with recipe count = 0
   return res.status(200).render("accounts/home", {
     document: "Home Page",
     style: "style",
+    firstNameDisplay:
+      accountInfo.info.firstName + "'s Recipes" || "Your Recipe Page",
+    recipeCounter: recipeListFound.count,
+    recipeList: data,
+    error: req.flash("error") || "",
+    success: req.flash("success") || "",
   });
+});
+// /accounts/logout
+router.get("/logout", (req, res) => {
+  const currentUser = req.session.user;
+  if (!currentUser) {
+    return res.redirect("/");
+  }
+  req.session.destroy();
+  return res.redirect("/");
 });
 
 module.exports = router;
