@@ -10,12 +10,12 @@
                 <a class="nav-link" href="/recipes/create">Create</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" action="/" method="GET">
+        <form class="form-inline my-2 my-lg-0" action="/accounts/logout" method="GET">
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Logout</button>
         </form>
     </div>
 </nav>
-
+{{!-- recipe recap --}}
 <div class="alert alert-warning text-center" role="alert">
     <b>Recipe Recaps:</b> You currently have {{recipeCounter}} recipes
 </div>
@@ -30,18 +30,19 @@
     {{success}}
 </div>
 {{/if}}
-
+{{!-- list each recipe --}}
 {{#each recipeList}}
 <div class="container pt-3">
     <div class="card">
-        <h5 class="card-header">{{this.recipeName}} ({{this._id}})</h5>
+        <h5 class="card-header">{{this.recipeName}} (recipe id: {{this._id}})</h5>
         <div class="card-body">
             <h6 class="card-title">{{this.createdAt}}</h6>
             {{#each ingredientsList}}
-            <p class="card-text">{{this.ingredientName}} ({{this._id}}) - {{this.ingredientQuantity}}</p>
+            <p class="card-text">Ingredient Name: {{this.ingredientName}} ({{this._id}}) - Ingredient
+                Quantity: {{this.ingredientQuantity}}</p>
             {{/each}}
             {{#if recipeNote}}
-            <p class="card-text"><b>Note: </b>{{this.recipeNote}}</p>
+            <p class="card-text"><b>Recipe Note: </b>{{this.recipeNote}}</p>
             {{/if}}
             {{!-- Lorem ipsum dolor --}}
             <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -55,6 +56,10 @@
     </div>
 </div>
 {{/each}}
+
+<footer class="container-fluid text-center bg-primary">
+    <a href="#" class="badge badge-dark">Back to Top</a>
+</footer>
 
 <script>
     function confirmDelete(button) {
