@@ -134,7 +134,7 @@ router.get("/delete/:recipeid", async (req, res) => {
 });
 
 // /recipes/edit/:recipeid
-router.get("/edit/:recipeid", async (req, res) => {
+router.get("/edit/:recipeid", limiter, async (req, res) => {
   const currentUser = req.session.user;
   const { recipeid } = req.params;
   if (!currentUser) {
