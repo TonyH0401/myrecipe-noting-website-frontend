@@ -23,7 +23,8 @@
     "http-errors": "^2.0.0",
     "moment": "^2.29.4",
     "morgan": "^1.10.0",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.7.0",
+    "sanitize-html": "^2.11.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
