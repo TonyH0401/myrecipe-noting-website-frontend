@@ -154,6 +154,7 @@ router.post("/login", async (req, res) => {
     accountPassword: password,
   });
   let data;
+  let errorMessage = "";
   await fetch(API + "/accounts/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -163,15 +164,20 @@ router.post("/login", async (req, res) => {
       data = await result.json();
     })
     .catch((error) => {
-      return res.status(500).render("errors/500", {
-        document: "Error",
-        message: error.message,
-      });
+      // .catch() will not execute a return but will assign error.message
+      // this is to prevent "Cannot set headers after they are sent to the client"
+      errorMessage = error.message;
     });
+  // we created an empty data variable for a placeholder, 
+  // if fetch() has problems or fetch returns an empty data
+  // then the data variable will not have any data inside it
+  // it will because be caught by this "if(!data)"
+  // depends on whether fetch returns empty data or fetch has error
+  // the returned message will be displayed accordingly
   if (!data) {
     return res.status(500).render("errors/500", {
       document: "Error",
-      message: "No Data",
+      message: errorMessage || "Fetch returns no Data!",
     });
   }
   if (data.code == 0) {
