@@ -8,6 +8,17 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const flash = require("connect-flash");
 const morgan = require("morgan");
+const { rateLimit } = require("express-rate-limit");
+const limiter = rateLimit({
+  windowMs: 3 * 60 * 1000, // 3 minutes
+  max: 100, // Limit each IP to 21 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false,
+  message: `<div style="width:100vh; padding: 1rem; background-color: red; font-size: 32px; font-weight: 700; 
+  text-align: center; margin: 0 auto"> 
+    <h3 style="color: white">You are suspended for sending too many requests!</h3>
+  </div> `,
+});
 
 // .env
 const port = process.env.PORT || "2020";
@@ -44,7 +55,7 @@ app.use(
 );
 
 // default route
-app.get("/", (req, res) => {
+app.get("/", limiter, (req, res) => {
   const currentUser = req.session.user;
   if (currentUser) {
     return res.status(201).redirect("/accounts/home");
